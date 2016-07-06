@@ -8,6 +8,9 @@ namespace RockPaperScissors
 {
     class Program
     {
+       static int Player1Move = -1;
+       static int Player2Move = -1;
+
         static Dictionary<string, IPlayer> AIPlayers = new Dictionary<string, IPlayer>()
         {
             // TODO:
@@ -28,6 +31,8 @@ namespace RockPaperScissors
             }
             while (true)
             {
+                Console.Clear();
+                Console.WriteLine("Chose the player :");
                 Console.WriteLine("\n1. Human vs AI");
                 Console.WriteLine("2. AI vs AI");
                 Console.WriteLine("3. Quit");
@@ -61,7 +66,7 @@ namespace RockPaperScissors
             }
             else if (choice == 2)
             {
-                return "Scissors";
+                return "Scissor";
             }
             else
             {
@@ -93,12 +98,15 @@ namespace RockPaperScissors
             int p1Choice = player1.NextMove();
             int p2Choice = player2.NextMove();
 
+            Player1Move = p1Choice;
+            Player2Move = p2Choice;
+
             if (p1Choice == -1 || p2Choice == -1)
             {
                 return -1;
             }
 
-            Console.WriteLine("{0}\t{1}", MoveToString(p1Choice), MoveToString(p2Choice));
+           // Console.WriteLine("{0}\t{1}", MoveToString(p1Choice), MoveToString(p2Choice));
 
             int winner = CalculateWinner(p1Choice, p2Choice);
 
@@ -110,6 +118,7 @@ namespace RockPaperScissors
 
         static string SelectAI()
         {
+            Console.Clear();
             Console.WriteLine("Select an AI:");
 
             // Show each of the possible opponents
@@ -132,12 +141,17 @@ namespace RockPaperScissors
 
             string chosenAI = SelectAI();
 
+            Console.Clear();
+
             Console.WriteLine("\nPlaying against {0}...\n", chosenAI);
             IPlayer ai = AIPlayers[chosenAI];
 
             while (true)
             {
+              
+               
                 int winner = RunGame(human, ai);
+                
                 if (winner == -1)
                 {
                     break;
@@ -155,7 +169,37 @@ namespace RockPaperScissors
                     ties++;
                 }
 
-                Console.WriteLine("\nHuman: {0}\tAI: {1}\tTies: {2}\n", humanWins, aiWins, ties);
+                Console.Clear();
+                Console.WriteLine("\nPlaying against {0}...\n", chosenAI);
+
+                // Console.WriteLine("{0}\t{1}", MoveToString(Player1Move), MoveToString(Player2Move));
+                Console.WriteLine("\n\tHuman: {0}            AI: {1}           Ties: {2}\n", humanWins, aiWins, ties);
+
+                if (winner == 1)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("\t{0} ", MoveToString(Player1Move));
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine("                 {0}\n", MoveToString(Player2Move));
+                }
+                if (winner == 2)
+                {
+                  
+                    Console.Write("\t{0}", MoveToString(Player1Move));
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("                 {0}\n", MoveToString(Player2Move));
+                    Console.ForegroundColor = ConsoleColor.White;
+
+                }
+                if (winner == 0)
+                {
+
+                    Console.Write("\t{0}", MoveToString(Player1Move));                  
+                    Console.WriteLine("                 {0}\n", MoveToString(Player2Move));
+                  
+
+                }
+              
             }
         }
 
